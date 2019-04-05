@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+
+}
+
+.side-pane {
+    width: 30%;
+}
+
+.map-pane {
+    width: 70%;
+}

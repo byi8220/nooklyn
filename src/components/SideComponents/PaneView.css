@@ -6,9 +6,6 @@
     padding-left: 5%;
 }
 
-.navbar-item {
-
-}
 .navbar-btn{
 
     border: none;
@@ -26,4 +23,11 @@
 }
 .navbar-btn:hover {
     background-color: #bbbbbb;
+}
+
+.trip-flex{
+    display:flex;
+    flex-direction: column;
+    height: 100vh;
+
 }

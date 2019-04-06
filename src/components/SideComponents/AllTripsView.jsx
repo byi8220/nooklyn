@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import TripListPage from './TripListPage';
+
+
 import './PaneView.css';
 
+import Pagination from 'react-bootstrap/Pagination'
+import TripListPage from './TripListPage';
 
 export default class AllTripsView extends Component {
     constructor(props){
         super(props);
         this.state = {
             currentlyFiltering: false,
+            pageNo: 1
         };
         this.toggleFavorites = this.toggleFavorites.bind(this);
         this.showLines = this.showLines.bind(this);
@@ -23,13 +27,22 @@ export default class AllTripsView extends Component {
             currentlyFiltering: !prevState.currentlyFiltering
             }) 
         );
-        // Make call to get list of favorites
+        // Filter
         console.log(this.state);
+    }
+
+
+    generatePagination() {
+        let pages = [];
+
+
+        return pages;
     }
 
     render() {
         return (
-        <div>
+        <div className="trip-flex">
+        
             <div className="navbar">
                 <div onClick={this.showLines} className="navbar-btn btn-unselected">
                     <i id="viewLinesBtn" className="material-icons">train</i>  
@@ -41,8 +54,13 @@ export default class AllTripsView extends Component {
                     <i id="favTripBtn"  className="material-icons">star_border</i>  
                 </div>      
             </div>
-            <hr />
+            <div>
+                <hr />
+            </div>
 
+            <TripListPage />
+
+            {this.generatePagination()}
         </div>
         )
     }

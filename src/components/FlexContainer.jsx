@@ -10,10 +10,10 @@ export default class FlexContainer extends Component {
     return (
       <div className='container'>
         <div className='side-pane'>
-          <SidePane />
+            <SidePane />
         </div>
         <div className='map-pane'>
-          <MapPane />
+            <MapPane />
         </div>
       </div>
     )

@@ -12,13 +12,14 @@ export class MapPane extends Component {
         width:'100%',
         maxWidth:'100%,'
     };
-    const containerStyle = {position: 'absolute', width: '70%', height:'100%'};
+    const containerStyle = {position: 'absolute', width: '75%', height:'100%'};
     return (
         <Map
             google = {this.props.google}
             zoom = {12}
             style = {mapStyle}
             containerStyle = {containerStyle}
+            // Magic number coords for Trump Tower
             initialCenter={{
                 lat:40.762436, 
                 lng:-73.973774
@@ -31,4 +32,4 @@ export class MapPane extends Component {
 
 export default GoogleApiWrapper({
     apiKey: MAP_API_KEY
-  })(MapPane);
+})(MapPane);

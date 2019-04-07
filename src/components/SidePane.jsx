@@ -16,6 +16,7 @@ export default class SidePane extends Component {
             currentTripDest: null
         }
         this.switchPanes = this.switchPanes.bind(this);
+        this.unloadTrip = this.unloadTrip.bind(this);
         this.loadNewTripAndSwitchTab = this.loadNewTripAndSwitchTab.bind(this);
     }
 
@@ -25,8 +26,23 @@ export default class SidePane extends Component {
         });
     }
 
+    unloadTrip() {
+        this.setState({
+            tabIndex:1,
+            currentArrivals: null,
+            currentTripDest: null
+        });
+        this.props.loadNewTrip(null);
+    }
+
     loadNewTripAndSwitchTab(arrivals, dest) {
         arrivals = arrivals.filter( (item) => item.attributes["station-name"] != null);
+        // Chose to Sort them by time
+        arrivals.sort(function(a,b) {
+            let aTime = new Date(a.attributes["time"]);
+            let bTime = new Date(b.attributes["time"]);
+            return aTime.getTime() - bTime.getTime();
+        });
         this.setState({
             tabIndex:2,
             currentArrivals: arrivals,
@@ -46,7 +62,7 @@ export default class SidePane extends Component {
                     loadNewTripAndSwitchTab={this.loadNewTripAndSwitchTab.bind(this)} />}
                 { this.state.tabIndex === 2
                     && <CurrentTripView id="currentTripView" 
-                    onBackBtnClick={this.switchPanes.bind(this,1)}
+                    onBackBtnClick={this.unloadTrip}
                     currentTripDest={this.state.currentTripDest} 
                     currentArrivals={this.state.currentArrivals} />}
             </div>

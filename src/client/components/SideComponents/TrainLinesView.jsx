@@ -31,7 +31,7 @@ export default class TrainLinesView extends Component {
                     <i id="favLineBtn"  className="material-icons">star_border</i>  
                 </div>      
             </div>
-            <hr />
+                <hr />
             </div>
         )
     }

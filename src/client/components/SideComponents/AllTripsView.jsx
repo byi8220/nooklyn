@@ -17,12 +17,14 @@ export default class AllTripsView extends Component {
         };
         this.toggleFavorites = this.toggleFavorites.bind(this);
         this.showLines = this.showLines.bind(this);
+        this.loadFavData = this.loadFavData.bind(this);
         this.loadPageData = this.loadPageData.bind(this);
         this.loadTrip = this.loadTrip.bind(this);
     }
 
     componentDidMount() {
         this.loadPageData(1);
+        this.loadFavData();
     }
 
     showLines() {
@@ -49,6 +51,17 @@ export default class AllTripsView extends Component {
         });
     }
 
+    loadFavData(){
+        const API_FAVORITE_TRIPS = '/api/favoriteTrips';
+        axios.get(API_FAVORITE_TRIPS)
+        .then( res => {
+
+        })
+        .catch( err => {
+            console.log(err);
+        });
+    }
+    
     loadPageData(pageNo) {
         const API_TRIP_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=${pageNo}&page%5Bsize%5D=20`;
         axios.get(API_TRIP_PAGE_URL)

@@ -28,8 +28,7 @@ export default class CurrentTripView extends Component {
     toggleFavorites(){
         this.setState( (prevState, props) =>({
             isFavorite: !prevState.isFavorite
-        }
-        ));
+        }));
     }
     renderItems(){
         if(!this.props.currentArrivals){

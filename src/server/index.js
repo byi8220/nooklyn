@@ -1,18 +1,74 @@
 import express from 'express';
 import path from 'path';
-  
+import * as dbManager from './dbManager';
+
+dbManager.buildDatabase();
   
 const app = express();
 
 app.get('/api/favoriteTrips', (req, res) => {
-	res.json({
-		message: 'Get Trips Here',
+	dbManager.getFavoriteTrips( function(err, rows) {
+		console.log(rows);
+		res.json(rows);
+	});
+});
+
+app.post('/api/favoriteTrips', (req,res) => {
+	let tripId = req.param('tripId');
+	dbManager.saveFavoriteTrip(tripId, function(err, rows) {
+		if(err){
+			console.err(err);
+			res.status(500);
+		}else{
+			res.status(202);
+		}
+		res.end();
+	});
+});
+
+app.delete('/api/favoriteTrips', (req,res) => {
+	let tripId = req.param('tripId');
+	dbManager.deleteFavoriteTrip(tripId, function(err, rows) {
+		if(err){
+			console.err(err);
+			res.status(500);
+		}else{
+			res.status(202);
+		}
+		res.end();
 	});
 });
 
 app.get('/api/favoriteLines', (req, res) => {
-	res.json({
-		message: 'Get Lines Here',
+	dbManager.getFavoriteLines( function(err, rows) {
+		console.log(rows);
+		res.json(rows);
+	});
+});
+
+app.post('/api/favoriteLines', (req,res) => {
+	let lineName = req.param('lineName');
+	dbManager.saveFavoriteTrip(lineName, function(err, rows) {
+		if(err){
+			console.err(err);
+			res.status(500);
+		}else{
+			res.status(202);
+		}
+		res.end();
+	});
+});
+
+app.delete('/api/favoriteLines', (req,res) => {
+	let tripId = req.param('lineName');
+	dbManager.deleteFavoriteLine(lineName, function(err, rows) {
+		if(err){
+			console.err(err);
+			res.status(500);
+		}else{
+			res.status(202);
+		}
+		res.end();
 	});
 });
 

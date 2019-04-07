@@ -7,14 +7,9 @@ export default class TrainLinesView extends Component {
             currentlyFiltering: false
         };
         this.toggleFavorites = this.toggleFavorites.bind(this);
-        this.goBackToTrips = this.goBackToTrips.bind(this);
 
     }
 
-    goBackToTrips() {
-
-        this.props.onBackBtnClick();
-    }
 
     toggleFavorites() {
         this.setState( (prevState, props) => ({
@@ -26,7 +21,7 @@ export default class TrainLinesView extends Component {
         return (
             <div>
             <div className="navbar">
-                <div onClick={this.goBackToTrips} className="navbar-btn btn-unselected">
+                <div onClick={this.props.onBackBtnClick} className="navbar-btn btn-unselected">
                     <i id="viewLinesBtn" className="material-icons">arrow_back</i>  
                 </div>      
                 <div className="navbar-item">

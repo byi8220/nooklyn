@@ -12,12 +12,13 @@ export default class AllTripsView extends Component {
     constructor(props){
         super(props);
         this.state = {
-            currentlyFiltering: false,
+            currentlyFilteringByFavorites: false,
             pageNo: 1,
         };
         this.toggleFavorites = this.toggleFavorites.bind(this);
         this.showLines = this.showLines.bind(this);
         this.loadPageData = this.loadPageData.bind(this);
+        this.loadTrip = this.loadTrip.bind(this);
     }
 
     componentDidMount() {
@@ -30,8 +31,23 @@ export default class AllTripsView extends Component {
 
     toggleFavorites() {
         this.setState((prevState, props) => ({
-            currentlyFiltering: !prevState.currentlyFiltering
+            currentlyFilteringByFavorites: !prevState.currentlyFilteringByFavorites
         }))
+    }
+
+    loadTrip(tripId, tripDest){
+        let newTrip = [];
+        const API_ARRIVALS_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips/${tripId}/arrivals`
+        axios.get(API_ARRIVALS_PAGE_URL)
+        .then( res => {
+            if(res.data){
+                console.log(res.data.data);
+                this.props.loadNewTripAndSwitchTab(res.data.data, tripDest);
+            }
+        })
+        .catch( err => {
+
+        });
     }
 
     loadPageData(pageNo) {
@@ -78,7 +94,7 @@ export default class AllTripsView extends Component {
                 <div className="navbar-item">
                     <h2>Trips</h2>  
                 </div>
-                <div onClick={this.toggleFavorites} className={`navbar-btn ${this.state.currentlyFiltering ? "btn-selected" : "btn-unselected"}`}>
+                <div onClick={this.toggleFavorites} className={`navbar-btn ${this.state.currentlyFilteringByFavorites ? "btn-selected" : "btn-unselected"}`}>
                     <i id="favTripBtn"  className="material-icons">star_border</i>  
                 </div>      
             </div>
@@ -86,12 +102,12 @@ export default class AllTripsView extends Component {
                 <hr />
             </div>
 
-            {!this.state.currentlyFiltering ?
-                <TripListPage pageData={this.state.pageData} />
-            :   <TripListPage pageData={this.state.favData}  /> }
+            {!this.state.currentlyFilteringByFavorites ?
+                <TripListPage loadTrip={this.loadTrip} pageData={this.state.pageData} />
+            :   <TripListPage loadTrip={this.loadTrip} pageData={this.state.favData}  /> }
             
             <div id="pagination">
-                {!this.state.currentlyFiltering && this.generatePagination()}
+                {!this.state.currentlyFilteringByFavorites && this.generatePagination()}
             </div>
 
         </div>

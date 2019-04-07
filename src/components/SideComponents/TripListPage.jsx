@@ -13,17 +13,21 @@ export default class TripListPage extends Component {
 
     constructor(props) {
         super(props);
+        this.onTripClicked = this.onTripClicked.bind(this);
     }
 
 
-
+    onTripClicked(tripId, tripDest){
+        this.props.loadTrip(tripId, tripDest);
+    }
     renderItems() {
         if(!this.props.pageData){
             return [];
         }
-        return this.props.pageData.map(function(item){
+        return this.props.pageData.map( (item) => {
             return(
-            <ListItem button>
+            <ListItem button
+            onClick={this.onTripClicked.bind(this,item.id, item.attributes["destination"])}>
                 <ListItemText 
                     primary={item.attributes["destination"]} 
                     secondary={item.attributes["origin-departure"]}

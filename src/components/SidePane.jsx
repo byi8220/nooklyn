@@ -12,10 +12,11 @@ export default class SidePane extends Component {
         this.state = {
             tabIndex: 1,
             filteringLine: null,
-            currentTrip: null
+            currentArrivals: null,
+            currentTripDest: null
         }
         this.switchPanes = this.switchPanes.bind(this);
-        
+        this.loadNewTripAndSwitchTab = this.loadNewTripAndSwitchTab.bind(this);
     }
 
     switchPanes(tab) {
@@ -24,6 +25,15 @@ export default class SidePane extends Component {
         });
     }
 
+    loadNewTripAndSwitchTab(arrivals, dest) {
+        this.setState({
+            tabIndex:2,
+            currentArrivals: arrivals,
+            currentTripDest: dest
+        });
+        console.log(this.props);
+        this.props.loadNewTrip(arrivals);
+    }
     render() {
 
         return (
@@ -32,10 +42,13 @@ export default class SidePane extends Component {
                     && <TrainLinesView id="trainLinesView" onBackBtnClick={this.switchPanes.bind(this,1)} />}
                 { this.state.tabIndex === 1
                     && <AllTripsView id="allTripsView" 
-                    filteringLine={this.state.filteringLine} onLinesBtnClick={this.switchPanes.bind(this,0)}/>}
+                    filteringLine={this.state.filteringLine} onLinesBtnClick={this.switchPanes.bind(this,0)}
+                    loadNewTripAndSwitchTab={this.loadNewTripAndSwitchTab.bind(this)} />}
                 { this.state.tabIndex === 2
                     && <CurrentTripView id="currentTripView" 
-                    currentTrip={this.state.currentTrip} />}
+                    onBackBtnClick={this.switchPanes.bind(this,1)}
+                    currentTripDest={this.state.currentTripDest} 
+                    currentArrivals={this.state.currentArrivals} />}
             </div>
         )
     }

@@ -26,11 +26,11 @@ export default class TripListPage extends Component {
         }
         return this.props.pageData.map( (item) => {
             return(
-            <ListItem button
+            <ListItem button key={item.id}
             onClick={this.onTripClicked.bind(this,item.id, item.attributes["destination"])}>
                 <ListItemText 
                     primary={item.attributes["destination"]} 
-                    secondary={item.attributes["origin-departure"]}
+                    secondary={"Departed at: " + new Date(item.attributes["origin-departure"]).toLocaleString()}
                     />
                 <ListItemAvatar>
                     <Avatar src={item.attributes["route-image-url"]} />

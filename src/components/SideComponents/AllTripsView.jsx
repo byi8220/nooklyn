@@ -41,7 +41,6 @@ export default class AllTripsView extends Component {
         axios.get(API_ARRIVALS_PAGE_URL)
         .then( res => {
             if(res.data){
-                console.log(res.data.data);
                 this.props.loadNewTripAndSwitchTab(res.data.data, tripDest);
             }
         })

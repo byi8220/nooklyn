@@ -26,12 +26,12 @@ export default class SidePane extends Component {
     }
 
     loadNewTripAndSwitchTab(arrivals, dest) {
+        arrivals = arrivals.filter( (item) => item.attributes["station-name"] != null);
         this.setState({
             tabIndex:2,
             currentArrivals: arrivals,
             currentTripDest: dest
         });
-        console.log(this.props);
         this.props.loadNewTrip(arrivals);
     }
     render() {

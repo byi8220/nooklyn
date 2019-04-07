@@ -31,3 +31,13 @@
     height: 100vh;
 
 }
+
+#pagination{
+    align-content: center;
+    align-items: center;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}

@@ -14,21 +14,30 @@ export default class TripListPage extends Component {
     constructor(props) {
         super(props);
     }
-    
-    trashman() {
-        let trash = [];
-        for(let i = 0; i < 200; i++){
-            trash.push(
-                <ListItem button>
-                    <ListItemText primary="Trash" />
-                </ListItem>)
+
+
+
+    renderItems() {
+        if(!this.props.pageData){
+            return [];
         }
-        return trash;
+        return this.props.pageData.map(function(item){
+            return(
+            <ListItem button>
+                <ListItemText 
+                    primary={item.attributes["destination"]} 
+                    secondary={item.attributes["origin-departure"]}
+                    />
+                <ListItemAvatar>
+                    <Avatar src={item.attributes["route-image-url"]} />
+                </ListItemAvatar>
+            </ListItem>
+        )});
     }
     render() {
         return (
             <List style={{maxHeight:'100%', overflow:'auto'}}>
-                {this.trashman()}
+                {this.renderItems()}
             </List>
         )
     }

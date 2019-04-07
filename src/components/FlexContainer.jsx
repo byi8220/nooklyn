@@ -8,7 +8,7 @@ import MapPane from './MapPane';
 export default class FlexContainer extends Component {
   render() {
     return (
-      <div className='container'>
+      <div className='flex-container'>
         <div className='side-pane'>
             <SidePane />
         </div>

@@ -5,17 +5,23 @@ import './PaneView.css';
 
 import Pagination from 'react-bootstrap/Pagination'
 import TripListPage from './TripListPage';
+import axios from 'axios';
 
 export default class AllTripsView extends Component {
+
     constructor(props){
         super(props);
         this.state = {
             currentlyFiltering: false,
-            pageNo: 1
+            pageNo: 1,
         };
         this.toggleFavorites = this.toggleFavorites.bind(this);
         this.showLines = this.showLines.bind(this);
+        this.loadPageData = this.loadPageData.bind(this);
+    }
 
+    componentDidMount() {
+        this.loadPageData(1);
     }
 
     showLines() {
@@ -23,26 +29,48 @@ export default class AllTripsView extends Component {
     }
 
     toggleFavorites() {
-        this.setState( (prevState, props) => ({
+        this.setState((prevState, props) => ({
             currentlyFiltering: !prevState.currentlyFiltering
-            }) 
-        );
-        // Filter
-        console.log(this.state);
+        }))
     }
 
+    loadPageData(pageNo) {
+        const API_TRIP_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=${pageNo}&page%5Bsize%5D=20`;
+        axios.get(API_TRIP_PAGE_URL)
+        .then( res => {
+            let pageObj = res.data;
+            this.setState({
+                pageData: pageObj.data,
+                pageNo: pageNo
+            });
+        })
+        .catch( err => {
+            console.log(err);
+        });
+    }
 
     generatePagination() {
         let pages = [];
-
-
-        return pages;
+        for(let i = 1; i <= 118; i++){
+            pages.push(
+                <Pagination.Item
+                    key={i} active={i===this.state.pageNo}
+                    onClick={this.loadPageData.bind(this,i)}>{i}</Pagination.Item>
+            )
+        }
+        return (
+            <Pagination>
+                <Pagination.First />
+                {pages}
+                <Pagination.Last />
+            </Pagination>
+        );
     }
 
     render() {
         return (
         <div className="trip-flex">
-        
+
             <div className="navbar">
                 <div onClick={this.showLines} className="navbar-btn btn-unselected">
                     <i id="viewLinesBtn" className="material-icons">train</i>  
@@ -58,9 +86,14 @@ export default class AllTripsView extends Component {
                 <hr />
             </div>
 
-            <TripListPage />
+            {!this.state.currentlyFiltering ?
+                <TripListPage pageData={this.state.pageData} />
+            :   <TripListPage pageData={this.state.favData}  /> }
+            
+            <div id="pagination">
+                {!this.state.currentlyFiltering && this.generatePagination()}
+            </div>
 
-            {this.generatePagination()}
         </div>
         )
     }

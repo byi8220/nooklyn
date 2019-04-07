@@ -34,7 +34,7 @@ export default class AllTripsView extends Component {
     toggleFavorites() {
         this.setState((prevState, props) => ({
             currentlyFilteringByFavorites: !prevState.currentlyFilteringByFavorites
-        }))
+        }), this.loadFavData);
     }
 
     loadTrip(tripId, tripDest){
@@ -43,7 +43,19 @@ export default class AllTripsView extends Component {
         axios.get(API_ARRIVALS_PAGE_URL)
         .then( res => {
             if(res.data){
-                this.props.loadNewTripAndSwitchTab(res.data.data, tripDest);
+                let isFavorite = false;
+                for(let i = 0; i < this.state.favData.length; i++){
+                    if (this.state.favData[i].id === tripId){
+                        isFavorite = true;
+                    }
+                }
+                this.props.loadNewTripAndSwitchTab(
+                    {
+                        tripId: tripId,
+                        arrivals: res.data.data,
+                        dest: tripDest,
+                        isFavorite: isFavorite
+                    });
             }
         })
         .catch( err => {
@@ -55,7 +67,29 @@ export default class AllTripsView extends Component {
         const API_FAVORITE_TRIPS = '/api/favoriteTrips';
         axios.get(API_FAVORITE_TRIPS)
         .then( res => {
-
+            let data = res.data.filter(function(item) {
+                return item.id != null;
+            });
+            let favorites = [];
+            data.forEach( (item) => {
+                if(item.id == null){
+                    return;
+                }
+                const API_TRIP_URL = `https://nooklyn-interview.herokuapp.com/trips/${item.id}`;
+                axios.get(API_TRIP_URL)
+                .then( res => {
+                    favorites.push(res.data.data);
+                    console.log(favorites);
+                    if(favorites.length === data.length){
+                        this.setState({
+                            favData: favorites
+                        });
+                    }
+                })
+                .catch( err => {
+                    console.log(err);
+                });
+            });
         })
         .catch( err => {
             console.log(err);

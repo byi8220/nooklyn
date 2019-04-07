@@ -5,9 +5,8 @@ import './PaneView.css';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
+
+import axios from 'axios';
 
 export default class CurrentTripView extends Component {
 
@@ -26,9 +25,30 @@ export default class CurrentTripView extends Component {
     }
 
     toggleFavorites(){
+        let newIsFavorite = !this.state.isFavorite;
+        let tripId = this.props.currentTripId;
+        const API_FAVORITE_TRIPS = `/api/favoriteTrips/${tripId}`;
         this.setState( (prevState, props) =>({
-            isFavorite: !prevState.isFavorite
-        }));
+            isFavorite: newIsFavorite
+        }), () => {
+            if(newIsFavorite){
+                axios.post(API_FAVORITE_TRIPS)
+                .then(res => {
+
+                })
+                .catch( err => {
+                    console.log(err)
+                });
+            }else{
+                axios.delete(API_FAVORITE_TRIPS)
+                .then(res => {
+
+                })
+                .catch( err => {
+                    console.log(err)
+                });
+            }
+        });
     }
     renderItems(){
         if(!this.props.currentArrivals){

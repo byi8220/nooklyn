@@ -13,8 +13,9 @@ app.get('/api/favoriteTrips', (req, res) => {
 	});
 });
 
-app.post('/api/favoriteTrips', (req,res) => {
-	let tripId = req.param('tripId');
+app.post('/api/favoriteTrips/:tripId', (req,res) => {
+	let tripId = req.params['tripId'];
+	console.log(tripId);
 	dbManager.saveFavoriteTrip(tripId, function(err, rows) {
 		if(err){
 			console.err(err);
@@ -26,8 +27,8 @@ app.post('/api/favoriteTrips', (req,res) => {
 	});
 });
 
-app.delete('/api/favoriteTrips', (req,res) => {
-	let tripId = req.param('tripId');
+app.delete('/api/favoriteTrips/:tripId', (req,res) => {
+	let tripId = req.params['tripId'];
 	dbManager.deleteFavoriteTrip(tripId, function(err, rows) {
 		if(err){
 			console.err(err);
@@ -46,8 +47,8 @@ app.get('/api/favoriteLines', (req, res) => {
 	});
 });
 
-app.post('/api/favoriteLines', (req,res) => {
-	let lineName = req.param('lineName');
+app.post('/api/favoriteLines/:lineName', (req,res) => {
+	let lineName = req.params['lineName'];
 	dbManager.saveFavoriteTrip(lineName, function(err, rows) {
 		if(err){
 			console.err(err);
@@ -59,8 +60,8 @@ app.post('/api/favoriteLines', (req,res) => {
 	});
 });
 
-app.delete('/api/favoriteLines', (req,res) => {
-	let tripId = req.param('lineName');
+app.delete('/api/favoriteLines/:lineName', (req,res) => {
+	let tripId = req.params['lineName'];
 	dbManager.deleteFavoriteLine(lineName, function(err, rows) {
 		if(err){
 			console.err(err);

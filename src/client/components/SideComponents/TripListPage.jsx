@@ -16,10 +16,10 @@ export default class TripListPage extends Component {
         this.onTripClicked = this.onTripClicked.bind(this);
     }
 
-
     onTripClicked(tripId, tripDest){
         this.props.loadTrip(tripId, tripDest);
     }
+
     renderItems() {
         if(!this.props.pageData){
             return [];

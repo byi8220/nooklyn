@@ -5,8 +5,8 @@ const database = new sqlite3.Database(path.join(__dirname, '..', '..', 'database
 
 export function buildDatabase(){
     console.log("database stuff here");
-    const CREATE_TRIPS = "CREATE TABLE IF NOT EXISTS favorite_trips (id PRIMARY KEY)";
-    const CREATE_LINES = "CREATE TABLE IF NOT EXISTS favorite_lines (id PRIMARY KEY)";
+    const CREATE_TRIPS = "CREATE TABLE IF NOT EXISTS favorite_trips (id, PRIMARY KEY (id));";
+    const CREATE_LINES = "CREATE TABLE IF NOT EXISTS favorite_lines (id, PRIMARY KEY (id));";
     database.run(CREATE_TRIPS);
     database.run(CREATE_LINES);
 }

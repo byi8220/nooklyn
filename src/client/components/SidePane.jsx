@@ -18,6 +18,7 @@ export default class SidePane extends Component {
         this.switchPanes = this.switchPanes.bind(this);
         this.unloadTrip = this.unloadTrip.bind(this);
         this.loadNewTripAndSwitchTab = this.loadNewTripAndSwitchTab.bind(this);
+
     }
 
     switchPanes(tab) {
@@ -29,26 +30,29 @@ export default class SidePane extends Component {
     unloadTrip() {
         this.setState({
             tabIndex:1,
+            currentTripId: null,
             currentArrivals: null,
             currentTripDest: null
         });
         this.props.loadNewTrip(null);
     }
 
-    loadNewTripAndSwitchTab(arrivals, dest) {
-        arrivals = arrivals.filter( (item) => item.attributes["station-name"] != null);
+    loadNewTripAndSwitchTab(trip) {
+        trip.arrivals = trip.arrivals.filter( (item) => item.attributes["station-name"] != null);
         // Chose to Sort them by time
-        arrivals.sort(function(a,b) {
+        trip.arrivals.sort(function(a,b) {
             let aTime = new Date(a.attributes["time"]);
             let bTime = new Date(b.attributes["time"]);
             return aTime.getTime() - bTime.getTime();
         });
         this.setState({
             tabIndex:2,
-            currentArrivals: arrivals,
-            currentTripDest: dest
+            currentTripId: trip.tripId,
+            currentArrivals: trip.arrivals,
+            currentTripDest: trip.dest,
+            currentTripIsFavorite: trip.isFavorite
         });
-        this.props.loadNewTrip(arrivals);
+        this.props.loadNewTrip(trip.arrivals);
     }
     render() {
 
@@ -63,8 +67,10 @@ export default class SidePane extends Component {
                 { this.state.tabIndex === 2
                     && <CurrentTripView id="currentTripView" 
                     onBackBtnClick={this.unloadTrip}
+                    currentTripId={this.state.currentTripId}
                     currentTripDest={this.state.currentTripDest} 
-                    currentArrivals={this.state.currentArrivals} />}
+                    currentArrivals={this.state.currentArrivals}
+                    isFavorite={this.state.currentTripIsFavorite} />}
             </div>
         )
     }

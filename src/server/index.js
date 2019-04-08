@@ -49,7 +49,7 @@ app.get('/api/favoriteLines', (req, res) => {
 
 app.post('/api/favoriteLines/:lineName', (req,res) => {
 	let lineName = req.params['lineName'];
-	dbManager.saveFavoriteTrip(lineName, function(err, rows) {
+	dbManager.saveFavoriteLine(lineName, function(err, rows) {
 		if(err){
 			console.err(err);
 			res.status(500);
@@ -61,7 +61,7 @@ app.post('/api/favoriteLines/:lineName', (req,res) => {
 });
 
 app.delete('/api/favoriteLines/:lineName', (req,res) => {
-	let tripId = req.params['lineName'];
+	let lineName = req.params['lineName'];
 	dbManager.deleteFavoriteLine(lineName, function(err, rows) {
 		if(err){
 			console.err(err);

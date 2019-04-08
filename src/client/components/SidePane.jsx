@@ -22,6 +22,7 @@ export default class SidePane extends Component {
         this.stopFilteringByLine = this.stopFilteringByLine.bind(this);
     }
 
+
     switchPanes(tab) {
         this.setState({
             tabIndex : tab

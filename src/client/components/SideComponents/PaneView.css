@@ -25,11 +25,16 @@
     background-color: #bbbbbb;
 }
 
-.trip-flex{
+.side-panel-container{
     display:flex;
     flex-direction: column;
     height: 100vh;
 
+}
+
+.train-line-container{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #pagination{

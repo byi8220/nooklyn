@@ -69,7 +69,7 @@ export default class CurrentTripView extends Component {
 
     render() {
         return (
-            <div className="trip-flex">
+            <div className="side-panel-container">
 
             <div className="navbar">
                 <div onClick={this.props.onBackBtnClick}  className="navbar-btn btn-unselected">

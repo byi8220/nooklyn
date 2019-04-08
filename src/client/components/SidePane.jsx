@@ -18,7 +18,8 @@ export default class SidePane extends Component {
         this.switchPanes = this.switchPanes.bind(this);
         this.unloadTrip = this.unloadTrip.bind(this);
         this.loadNewTripAndSwitchTab = this.loadNewTripAndSwitchTab.bind(this);
-
+        this.filterByLine = this.filterByLine.bind(this);
+        this.stopFilteringByLine = this.stopFilteringByLine.bind(this);
     }
 
     switchPanes(tab) {
@@ -38,6 +39,7 @@ export default class SidePane extends Component {
     }
 
     loadNewTripAndSwitchTab(trip) {
+        console.log(trip);
         trip.arrivals = trip.arrivals.filter( (item) => item.attributes["station-name"] != null);
         // Chose to Sort them by time
         trip.arrivals.sort(function(a,b) {
@@ -54,16 +56,41 @@ export default class SidePane extends Component {
         });
         this.props.loadNewTrip(trip.arrivals);
     }
+
+    filterByLine(lineName){
+        this.setState({
+            filteringLine: lineName
+        }, () => {
+            console.log(lineName);
+            this.switchPanes(1);
+        });
+    }
+
+    stopFilteringByLine(callback){
+        this.setState({
+            filteringLine: null
+        }, () => {
+            console.log("Stopped filtering by line");
+            console.log(this.state.filteringLine);
+            this.switchPanes(1);
+
+            callback();
+        });
+    }
+
     render() {
 
         return (
             <div>
                 { this.state.tabIndex === 0
-                    && <TrainLinesView id="trainLinesView" onBackBtnClick={this.switchPanes.bind(this,1)} />}
+                    && <TrainLinesView id="trainLinesView" onBackBtnClick={this.switchPanes.bind(this,1)} 
+                    filterByLine={this.filterByLine.bind(this)} />}
                 { this.state.tabIndex === 1
                     && <AllTripsView id="allTripsView" 
                     filteringLine={this.state.filteringLine} onLinesBtnClick={this.switchPanes.bind(this,0)}
-                    loadNewTripAndSwitchTab={this.loadNewTripAndSwitchTab.bind(this)} />}
+                    loadNewTripAndSwitchTab={this.loadNewTripAndSwitchTab.bind(this)} 
+                    currentlyFilteringByLine={this.state.filteringLine != null} 
+                    stopFilteringByLine={this.stopFilteringByLine} />}
                 { this.state.tabIndex === 2
                     && <CurrentTripView id="currentTripView" 
                     onBackBtnClick={this.unloadTrip}

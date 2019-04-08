@@ -20,6 +20,7 @@ export default class AllTripsView extends Component {
         this.loadFavData = this.loadFavData.bind(this);
         this.loadPageData = this.loadPageData.bind(this);
         this.loadTrip = this.loadTrip.bind(this);
+        this.stopFilteringByLine = this.stopFilteringByLine.bind(this);
     }
 
     componentDidMount() {
@@ -42,24 +43,28 @@ export default class AllTripsView extends Component {
         const API_ARRIVALS_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips/${tripId}/arrivals`
         axios.get(API_ARRIVALS_PAGE_URL)
         .then( res => {
+            console.log(res);
             if(res.data){
                 let isFavorite = false;
-                for(let i = 0; i < this.state.favData.length; i++){
-                    if (this.state.favData[i].id === tripId){
-                        isFavorite = true;
+                if(this.state.favData != null){
+                    for(let i = 0; i < this.state.favData.length; i++){
+                        if (this.state.favData[i].id === tripId){
+                            isFavorite = true;
+                        }
                     }
                 }
-                this.props.loadNewTripAndSwitchTab(
-                    {
-                        tripId: tripId,
-                        arrivals: res.data.data,
-                        dest: tripDest,
-                        isFavorite: isFavorite
-                    });
+                let trip = {
+                    tripId: tripId,
+                    arrivals: res.data.data,
+                    dest: tripDest,
+                    isFavorite: isFavorite
+                };
+                console.log(trip);
+                this.props.loadNewTripAndSwitchTab(trip);
             }
         })
         .catch( err => {
-
+            console.log(err);
         });
     }
 
@@ -97,13 +102,20 @@ export default class AllTripsView extends Component {
     }
     
     loadPageData(pageNo) {
-        const API_TRIP_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=${pageNo}&page%5Bsize%5D=20`;
+        let filter = (this.props.currentlyFilteringByLine) ? `filter%5Broute%5D=${this.props.filteringLine}&` : "" ;
+        let API_TRIP_PAGE_URL = `https://nooklyn-interview.herokuapp.com/trips?${filter}page%5Bnumber%5D=${pageNo}&page%5Bsize%5D=20`;
         axios.get(API_TRIP_PAGE_URL)
         .then( res => {
             let pageObj = res.data;
+            console.log(pageObj);
+            let lastPage = pageObj.links["last"]
+                            .replace(/(.*)\?/, "")
+                            .replace(/(.*)page%5Bnumber%5D=(\d+).*/,"$2");
+            console.log(lastPage);
             this.setState({
                 pageData: pageObj.data,
-                pageNo: pageNo
+                pageNo: pageNo,
+                lastPageNo: Number(lastPage)
             });
         })
         .catch( err => {
@@ -113,7 +125,7 @@ export default class AllTripsView extends Component {
 
     generatePagination() {
         let pages = [];
-        for(let i = 1; i <= 118; i++){
+        for(let i = 1; i <= this.state.lastPageNo; i++){
             pages.push(
                 <Pagination.Item
                     key={i} active={i===this.state.pageNo}
@@ -129,14 +141,30 @@ export default class AllTripsView extends Component {
         );
     }
 
+    stopFilteringByLine(){
+        this.props.stopFilteringByLine( () => {
+            console.log(this.props.filteringLine);
+            console.log(this.props.currentlyFilteringByLine);
+            this.loadPageData(1);
+        });
+    }
+
     render() {
         return (
-        <div className="trip-flex">
+        <div className="side-panel-container">
 
             <div className="navbar">
+            {!this.props.currentlyFilteringByLine ? 
                 <div onClick={this.showLines} className="navbar-btn btn-unselected">
                     <i id="viewLinesBtn" className="material-icons">train</i>  
-                </div>      
+                </div>
+                :
+                <div onClick={this.stopFilteringByLine} className="navbar-btn btn-unselected">
+                    <i id="stopFilteringBtn" className="material-icons">arrow_back</i>  
+                </div>
+            
+            }
+    
                 <div className="navbar-item">
                     <h2>Trips</h2>  
                 </div>
